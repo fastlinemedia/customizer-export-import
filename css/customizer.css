@@ -1,0 +1,25 @@
+.cei-form {
+    position: absolute;
+    left: -99999px;
+}
+.cei-hr {
+    margin: 20px 0px 10px;
+}
+.cei-import-file {
+    background: #eeeeee;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 12px;
+}
+.cei-import-images {
+    display: block;
+    margin-bottom: 10px;
+}
+.cei-uploading {
+    background: #eeeeee;
+    display: none;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 12px;
+}
