@@ -189,10 +189,17 @@ final class CEI_Core {
         	
         	if ( self::_is_image_url( $val ) ) {
             	
-            	$url = self::_sideload_image( $val );
+            	$data = self::_sideload_image( $val );
             	
-            	if ( ! is_wp_error( $url ) ) {
-                	$mods[ $key ] = $url;
+            	if ( ! is_wp_error( $data ) ) {
+                	
+                	$mods[ $key ] = $data->url;
+                	
+                	// Handle header image controls.
+                	if ( isset( $mods[ $key . '_data' ] ) ) {
+                	    $mods[ $key . '_data' ] = $data;
+                	    update_post_meta( $data->attachment_id, '_wp_attachment_is_custom_header', get_stylesheet() );
+                	}
             	}
         	}
     	}
@@ -209,7 +216,7 @@ final class CEI_Core {
      */
 	static private function _sideload_image( $file ) 
 	{
-    	$url = '';
+    	$data = new stdClass();
     	
     	if ( ! function_exists( 'media_handle_sideload' ) ) {
             require_once( ABSPATH . 'wp-admin/includes/media.php' );
@@ -239,11 +246,17 @@ final class CEI_Core {
     			@unlink( $file_array['tmp_name'] );
     			return $id;
     		}
-    
-    		$url = wp_get_attachment_url( $id );
+    		
+    		// Build the object to return.
+    		$meta                   = wp_get_attachment_metadata( $id );
+    		$data->attachment_id    = $id;
+    		$data->url              = wp_get_attachment_url( $id );
+    		$data->thumbnail_url    = wp_get_attachment_thumb_url( $id );
+    		$data->height           = $meta['height'];
+    		$data->width            = $meta['width'];
     	}
     
-    	return $url;
+    	return $data;
     }
 	
 	/**
