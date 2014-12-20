@@ -27,6 +27,8 @@ Importing customizer settings is just as easy. Choose the export file you would 
 
 We'd love to hear your feedback as to how we could improve the Customizer Export/Import plugin, or better yet, see theme developers actively contribute! Don't hesitate to let us know if you're interested in contributing as we would gladly have others on board.
 
+The Customizer Export/Import plugin is brought to you by the fine folks at [Beaver Builder](http://www.wpbeaverbuilder.com/).
+
 == Installation ==
 
 1. Install the Customizer Export/Import plugin either via the WordPress plugin directory, or by uploading the files to your server at wp-content/plugins.
