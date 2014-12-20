@@ -37,11 +37,12 @@ We'd love to hear your feedback as to how we could improve the Customizer Export
 
 Please visit our blog for more info on the [Customizer Export/Import plugin](http://www.wpbeaverbuilder.com/wordpress-customizer-export-import-plugin/).
 
+== Screenshots ==
+
+1. The export/import customizer section.
+
 == Changelog ==
 
 = Version 0.1 =
 
 Initial release.
-
-
-
