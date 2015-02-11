@@ -15,7 +15,7 @@ Easily export or import your WordPress customizer settings!
 
 The Customizer Export/Import plugin allows you to export or import your WordPress customizer settings from directly within the customizer interface! If your theme makes use of the WordPress customizer for its settings, this plugin is for you!
 
-Please visit our blog for more info on the [Customizer Export/Import plugin](http://www.wpbeaverbuilder.com/wordpress-customizer-export-import-plugin/).
+Please visit our blog for more info on the [Customizer Export/Import plugin](https://www.wpbeaverbuilder.com/wordpress-customizer-export-import-plugin/?utm_source=external&utm_medium=wp-repo&utm_campaign=customizer-export-description).
 
 = How It Works =
 
@@ -27,7 +27,7 @@ Importing customizer settings is just as easy. Choose the export file you would 
 
 We'd love to hear your feedback as to how we could improve the Customizer Export/Import plugin, or better yet, see theme developers actively contribute! Don't hesitate to let us know if you're interested in contributing as we would gladly have others on board.
 
-The Customizer Export/Import plugin is brought to you by the fine folks at [Beaver Builder](http://www.wpbeaverbuilder.com/).
+The Customizer Export/Import plugin is brought to you by the fine folks at [Beaver Builder](https://www.wpbeaverbuilder.com/?utm_source=external&utm_medium=wp-repo&utm_campaign=customizer-export-description).
 
 == Installation ==
 
@@ -37,7 +37,7 @@ The Customizer Export/Import plugin is brought to you by the fine folks at [Beav
 
 == Frequently Asked Questions ==
 
-Please visit our blog for more info on the [Customizer Export/Import plugin](http://www.wpbeaverbuilder.com/wordpress-customizer-export-import-plugin/).
+Please visit our blog for more info on the [Customizer Export/Import plugin](https://www.wpbeaverbuilder.com/wordpress-customizer-export-import-plugin/?utm_source=external&utm_medium=wp-repo&utm_campaign=customizer-export-faq).
 
 == Screenshots ==
 
