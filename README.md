@@ -10,6 +10,20 @@ Exporting customizer settings is easy. Click the export button from within the c
 
 Importing customizer settings is just as easy. Choose the export file you would like to import, select whether you would like to download and import images (similar to importing posts), and finally, click the import button. Once your settings have been imported the page will refresh and your new design will be displayed.
 
+## Exporting Custom Options ##
+
+Some plugins or themes may create controls that don't store their settings as theme mods and instead store them in the WordPress options table. These settings can also be exported and imported by adding your option key to the array of options that will be exported as shown below.
+
+```
+function my_export_option_keys( $keys ) {
+	$keys[] = 'my_option_key';
+	$keys[] = 'another_option_key';
+	return $keys;
+}
+
+add_filter( 'cei_export_option_keys', 'my_export_option_keys' );
+```
+
 ## Contribute! ##
 
 We'd love to hear your feedback as to how we could improve the Customizer Export/Import plugin, or better yet, see theme developers actively contribute! Don't hesitate to let us know if you're interested in contributing as we would gladly have others on board.
