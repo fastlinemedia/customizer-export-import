@@ -10,7 +10,7 @@ final class CEI_Core {
      */	 
     static public function load_plugin_textdomain() 
     {
-        load_plugin_textdomain( CEI_TD, false, basename( CEI_PLUGIN_DIR ) . '/lang/' );
+        load_plugin_textdomain( 'customizer-export-import', false, basename( CEI_PLUGIN_DIR ) . '/lang/' );
     }
 	
 	/**
@@ -52,7 +52,7 @@ final class CEI_Core {
 	
         // Localize
         wp_localize_script( 'cei-js', 'CEIl10n', array(
-            'emptyImport'   => __( 'Please choose a file to import.', CEI_TD )
+            'emptyImport'   => __( 'Please choose a file to import.', 'customizer-export-import' )
         ));
         
         // Config
@@ -75,7 +75,7 @@ final class CEI_Core {
 
 	    // Add the export/import section.
         $customizer->add_section( 'cei-section', array(
-            'title'    => __( 'Export/Import', CEI_TD ),
+            'title'    => __( 'Export/Import', 'customizer-export-import' ),
             'priority' => 10000000
         ));
         
@@ -110,15 +110,22 @@ final class CEI_Core {
     	$template   = get_option( 'template' );
     	$charset    = get_option( 'blog_charset' );
     	$mods       = get_theme_mods();
+    	$data		= array(
+			        	  'template'  => $template,
+			        	  'mods'      => $mods ? $mods : array()
+			    	  );
     	
+    	// Allow plugin developers to hook into the export.
+    	$data = apply_filters( 'cei_export_data', $data );
+    	
+    	// Set the download headers.
     	header( 'Content-disposition: attachment; filename=' . $theme . '-export.dat' );
 		header( 'Content-Type: application/octet-stream; charset=' . $charset );
     	
-    	echo serialize( array(
-        	'template'  => $template,
-        	'mods'      => $mods ? $mods : array()
-    	));
+    	// Serialize the export data.
+    	echo serialize( $data );
     	
+    	// Start the download.
     	die();
     }
 	
@@ -145,15 +152,15 @@ final class CEI_Core {
     	
     	// Data checks.
     	if ( 'array' != gettype( $data ) ) {
-        	$cei_error = __( 'Error importing settings! Please check that you uploaded a customizer export file.', CEI_TD );
+        	$cei_error = __( 'Error importing settings! Please check that you uploaded a customizer export file.', 'customizer-export-import' );
         	return;
     	}
     	if ( ! isset( $data['template'] ) || ! isset( $data['mods'] ) ) {
-        	$cei_error = __( 'Error importing settings! Please check that you uploaded a customizer export file.', CEI_TD );
+        	$cei_error = __( 'Error importing settings! Please check that you uploaded a customizer export file.', 'customizer-export-import' );
         	return;
     	}
     	if ( $data['template'] != $template ) {
-        	$cei_error = __( 'Error importing settings! The settings you uploaded are not for the current theme.', CEI_TD );
+        	$cei_error = __( 'Error importing settings! The settings you uploaded are not for the current theme.', 'customizer-export-import' );
         	return;
     	}
     	
@@ -161,6 +168,9 @@ final class CEI_Core {
     	if ( isset( $_REQUEST['cei-import-images'] ) ) {
     	    $data['mods'] = self::_import_images( $data['mods'] );
     	}
+    	
+    	// Allow plugin developers to hook into the import.
+    	do_action( 'cei_import', $data );
     	
     	// Call the customize_save action.
     	do_action( 'customize_save', $wp_customize );
