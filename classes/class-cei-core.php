@@ -112,11 +112,22 @@ final class CEI_Core {
     	$mods       = get_theme_mods();
     	$data		= array(
 			        	  'template'  => $template,
-			        	  'mods'      => $mods ? $mods : array()
+			        	  'mods'      => $mods ? $mods : array(),
+			        	  'options'	  => array()
 			    	  );
-    	
-    	// Allow plugin developers to hook into the export.
-    	$data = apply_filters( 'cei_export_data', $data );
+			    	  
+		// Plugin developers can specify option keys to export.
+		$option_keys = apply_filters( 'cei_export_option_keys', array() );
+		
+		// Add options to the data.
+		foreach ( $option_keys as $option_key ) {
+			
+			$option_value = get_option( $option_key );
+			
+			if ( $option_value ) {
+				$data['options'][ $option_key ] = $option_value;
+			}
+		}
     	
     	// Set the download headers.
     	header( 'Content-disposition: attachment; filename=' . $theme . '-export.dat' );
@@ -169,8 +180,12 @@ final class CEI_Core {
     	    $data['mods'] = self::_import_images( $data['mods'] );
     	}
     	
-    	// Allow plugin developers to hook into the import.
-    	do_action( 'cei_import', $data );
+    	// Import custom options.
+    	if ( isset( $data['options'] ) ) {
+	    	foreach ( $data['options'] as $option_key => $option_value ) {
+		    	update_option( $option_key, $option_value );
+	    	}
+    	}
     	
     	// Call the customize_save action.
     	do_action( 'customize_save', $wp_customize );
