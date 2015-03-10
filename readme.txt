@@ -59,4 +59,8 @@ Please visit our blog for more info on the [Customizer Export/Import plugin](htt
 
 = Version 0.1 =
 
-Initial release.
+- Initial release.
+
+= Version 0.2 =
+
+- Added cei_export_option_keys filter for exporting custom options.
