@@ -3,7 +3,7 @@
  * Plugin Name: Customizer Export/Import
  * Plugin URI: http://www.wpbeaverbuilder.com/wordpress-customizer-export-import-plugin/?utm_source=external&utm_medium=customizer-export&utm_campaign=plugins-page
  * Description: Adds settings export and import functionality to the WordPress customizer.
- * Version: 0.1
+ * Version: 0.2
  * Author: The Beaver Builder Team
  * Author URI: http://www.wpbeaverbuilder.com/?utm_source=external&utm_medium=customizer-export&utm_campaign=plugins-page
  * License: GNU General Public License v2.0
