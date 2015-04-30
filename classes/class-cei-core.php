@@ -1,13 +1,19 @@
 <?php
 
 /**
- * @class CEI_Core
+ * The main export/import class.
+ *
+ * @since 0.1
  */
 final class CEI_Core {
 
 	/**
-	 * @property $core_options
-	 */	 
+	 * An array of core options that shouldn't be imported.
+	 *
+	 * @since 0.3
+	 * @access private
+	 * @var array $core_options
+	 */
 	static private $core_options = array(
 		'blogname',
 		'blogdescription',
@@ -17,7 +23,10 @@ final class CEI_Core {
 	);
 
 	/**
-	 * @method load_plugin_textdomain
+	 * Load a translation for this plugin.
+	 *
+	 * @since 0.1
+	 * @return void
 	 */	 
 	static public function load_plugin_textdomain() 
 	{
@@ -25,7 +34,13 @@ final class CEI_Core {
 	}
 	
 	/**
-	 * @method init
+	 * Check to see if we need to do an export or import.
+	 * This should be called by the customize_register action.
+	 *
+	 * @since 0.1
+	 * @since 0.3 Passing $wp_customize to the export and import methods.
+	 * @param object $wp_customize An instance of WP_Customize_Manager.
+	 * @return void
 	 */
 	static public function init( $wp_customize ) 
 	{
@@ -41,7 +56,10 @@ final class CEI_Core {
 	}
 	
 	/**
-	 * @method controls_print_scripts
+	 * Prints scripts for the control.
+	 *
+	 * @since 0.1
+	 * @return void
 	 */
 	static public function controls_print_scripts() 
 	{
@@ -53,7 +71,10 @@ final class CEI_Core {
 	}
 	
 	/**
-	 * @method controls_enqueue_scripts
+	 * Enqueues scripts for the control.
+	 *
+	 * @since 0.1
+	 * @return void
 	 */
 	static public function controls_enqueue_scripts() 
 	{
@@ -78,7 +99,11 @@ final class CEI_Core {
 	}
 	
 	/**
-	 * @method register
+	 * Registers the control with the customizer.
+	 *
+	 * @since 0.1
+	 * @param object $wp_customize An instance of WP_Customize_Manager.
+	 * @return void
 	 */
 	static public function register( $wp_customize ) 
 	{
@@ -108,8 +133,13 @@ final class CEI_Core {
 	}
 	
 	/**
-	 * @method _export
-	 * @private
+	 * Export customizer settings.
+	 *
+	 * @since 0.1
+	 * @since 0.3 Added $wp_customize param and exporting of options.
+	 * @access private
+	 * @param object $wp_customize An instance of WP_Customize_Manager.
+	 * @return void
 	 */
 	static private function _export( $wp_customize ) 
 	{
@@ -117,8 +147,8 @@ final class CEI_Core {
 			return;
 		}
 		
-		$theme		= get_option( 'stylesheet' );
-		$template	= get_option( 'template' );
+		$theme		= get_stylesheet();
+		$template	= get_template();
 		$charset	= get_option( 'blog_charset' );
 		$mods		= get_theme_mods();
 		$data		= array(
@@ -153,7 +183,7 @@ final class CEI_Core {
 			}
 		}
 					  
-		// Plugin developers can specify option keys to export.
+		// Plugin developers can specify additional option keys to export.
 		$option_keys = apply_filters( 'cei_export_option_keys', array() );
 		
 		foreach ( $option_keys as $option_key ) {
@@ -180,8 +210,11 @@ final class CEI_Core {
 	 * Imports uploaded mods and calls WordPress core customize_save actions so
 	 * themes that hook into them can act before mods are saved to the database.
 	 *
-	 * @method _import
-	 * @private
+	 * @since 0.1
+	 * @since 0.3 Added $wp_customize param and importing of options.
+	 * @access private
+	 * @param object $wp_customize An instance of WP_Customize_Manager.
+	 * @return void
 	 */
 	static private function _import( $wp_customize ) 
 	{
@@ -195,7 +228,7 @@ final class CEI_Core {
 		global $cei_error;
 		
 		$cei_error	 = false;
-		$template	 = get_option( 'template' );
+		$template	 = get_template();
 		$raw		 = file_get_contents( $_FILES['cei-import-file']['tmp_name'] );
 		$data		 = @unserialize( $raw );
 		
@@ -251,8 +284,12 @@ final class CEI_Core {
 	}
 	
 	/**
-	 * @method _import_images
-	 * @private
+	 * Imports images for settings saved as mods.
+	 *
+	 * @since 0.1
+	 * @access private
+	 * @param array $mods An array of customizer mods.
+	 * @return array The mods array with any new import data.
 	 */
 	static private function _import_images( $mods ) 
 	{
@@ -280,10 +317,12 @@ final class CEI_Core {
 	
 	/**
 	 * Taken from the core media_sideload_image function and
-	 * modified to return the url instead of html.
+	 * modified to return an array of data instead of html.
 	 *
-	 * @method _sideload_image
-	 * @private
+	 * @since 0.1
+	 * @access private
+	 * @param string $file The image file path.
+	 * @return array An array of image data.
 	 */
 	static private function _sideload_image( $file ) 
 	{
@@ -331,8 +370,12 @@ final class CEI_Core {
 	}
 	
 	/**
-	 * @method _is_image_url
-	 * @private
+	 * Checks to see whether a string is an image url or not.
+	 *
+	 * @since 0.1
+	 * @access private
+	 * @param string $string The string to check.
+	 * @return bool Whether the string is an image url or not.
 	 */
 	static private function _is_image_url( $string = '' ) 
 	{
