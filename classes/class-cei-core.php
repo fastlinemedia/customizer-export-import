@@ -218,19 +218,45 @@ final class CEI_Core {
 	 */
 	static private function _import( $wp_customize ) 
 	{
+		// Make sure we have a valid nonce.
 		if ( ! wp_verify_nonce( $_REQUEST['cei-import'], 'cei-importing' ) ) {
 			return;
 		}
 		
+		// Make sure WordPress upload support is loaded.
+		if ( ! function_exists( 'wp_handle_upload' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		}
+		
+		// Load the export/import option class.
 		require_once CEI_PLUGIN_DIR . 'classes/class-cei-option.php';
 		
+		// Setup global vars.
 		global $wp_customize;
 		global $cei_error;
 		
+		// Setup internal vars.
 		$cei_error	 = false;
 		$template	 = get_template();
-		$raw		 = file_get_contents( $_FILES['cei-import-file']['tmp_name'] );
-		$data		 = @unserialize( $raw );
+		$overrides   = array( 'test_form' => FALSE, 'mimes' => array('dat' => 'text/dat') );
+		$file        = wp_handle_upload( $_FILES['cei-import-file'], $overrides );
+
+		// Make sure we have an uploaded file.
+		if ( isset( $file['error'] ) ) {
+			$cei_error = $file['error'];
+			return;
+		}
+		if ( ! file_exists( $file['file'] ) ) {
+			$cei_error = __( 'Error importing settings! Please try again.', 'customizer-export-import' );
+			return;
+		}
+		
+		// Get the upload data.
+		$raw  = file_get_contents( $file['file'] );
+		$data = @unserialize( $raw );
+		
+		// Remove the uploaded file.
+		unlink( $file['file'] );
 		
 		// Data checks.
 		if ( 'array' != gettype( $data ) ) {
