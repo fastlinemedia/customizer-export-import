@@ -159,7 +159,7 @@ final class CEI_Core {
 		
 		// Get options from the Customizer API.
 		$settings = $wp_customize->settings();
-	
+
 		foreach ( $settings as $key => $setting ) {
 			
 			if ( 'option' == $setting->type ) {
@@ -185,7 +185,7 @@ final class CEI_Core {
 					  
 		// Plugin developers can specify additional option keys to export.
 		$option_keys = apply_filters( 'cei_export_option_keys', array() );
-		
+
 		foreach ( $option_keys as $option_key ) {
 			
 			$option_value = get_option( $option_key );
@@ -194,14 +194,33 @@ final class CEI_Core {
 				$data['options'][ $option_key ] = $option_value;
 			}
 		}
-		
-		// Set the download headers.
-		header( 'Content-disposition: attachment; filename=' . $theme . '-export.dat' );
-		header( 'Content-Type: application/octet-stream; charset=' . $charset );
-		
-		// Serialize the export data.
-		echo serialize( $data );
-		
+
+		// sorting can help when diff'ing exported settings, esp. with JSON pretty print
+		ksort($data['options']);
+		ksort($data['mods']);
+		ksort($data);
+
+		// The JSON button shouldn't be shown when PHP has no JSON functionality, but checking again can't hurt
+		if ( isset( $_REQUEST['cei-export-format'] ) && ( $_REQUEST['cei-export-format'] == 'json' ) && function_exists('json_encode')) {
+			// Set the download headers.
+			header( 'Content-disposition: attachment; filename=' . $theme . '-export.json' );
+			header( 'Content-Type: application/json; charset=' . $charset );
+
+			// pretty print only available in newer php versions
+			if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+				echo json_encode($data, JSON_PRETTY_PRINT);
+			} else {
+				echo json_encode($data);
+			}
+		} else {
+			// Set the download headers.
+			header( 'Content-disposition: attachment; filename=' . $theme . '-export.dat' );
+			header( 'Content-Type: application/octet-stream; charset=' . $charset );
+
+			// Serialize the export data.
+			echo serialize( $data );
+		}
+
 		// Start the download.
 		die();
 	}
@@ -239,6 +258,9 @@ final class CEI_Core {
 		$cei_error	 = false;
 		$template	 = get_template();
 		$overrides   = array( 'test_form' => FALSE, 'mimes' => array('dat' => 'text/dat') );
+		if ( function_exists( 'json_decode' ) ) {
+			$overrides['mimes']['json'] = 'application/json';
+		}
 		$file        = wp_handle_upload( $_FILES['cei-import-file'], $overrides );
 
 		// Make sure we have an uploaded file.
@@ -253,8 +275,21 @@ final class CEI_Core {
 		
 		// Get the upload data.
 		$raw  = file_get_contents( $file['file'] );
-		$data = @unserialize( $raw );
-		
+
+		switch ( $file['type'] ) {
+			case 'text/data':
+				$data = @unserialize( $raw );
+				break;
+
+			case 'application/json':
+				$data = function_exists( 'json_decode' ) ? @json_decode( $raw, true ) : null;
+				break;
+
+			default:
+				$cei_error = __( 'Error importing settings! Please check that you uploaded a customizer export file.', 'customizer-export-import' );
+				return;
+		}
+
 		// Remove the uploaded file.
 		unlink( $file['file'] );
 		

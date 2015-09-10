@@ -2,9 +2,12 @@
 	<?php _e( 'Export', 'customizer-export-import' ); ?>
 </span>
 <span class="description customize-control-description">
-	<?php _e( 'Click the button below to export the customization settings for this theme.', 'customizer-export-import' ); ?>
+	<?php _e( 'Click a button below to export the customization settings for this theme.', 'customizer-export-import' ); ?>
 </span>
-<input type="button" class="button" name="cei-export-button" value="<?php esc_attr_e( 'Export', 'customizer-export-import' ); ?>" />
+<input type="button" class="button" name="cei-export-button-php" value="<?php esc_attr_e( 'Export PHP', 'customizer-export-import' ); ?>" />
+<?php if (function_exists('json_encode')): ?>
+<input type="button" class="button" name="cei-export-button-json" value="<?php esc_attr_e( 'Export JSON', 'customizer-export-import' ); ?>" />
+<?php endif; ?>
 
 <hr class="cei-hr" />
 

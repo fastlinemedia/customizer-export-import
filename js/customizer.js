@@ -4,15 +4,21 @@
 	
 		init: function()
 		{
-			$( 'input[name=cei-export-button]' ).on( 'click', CEI._export );
+			$( 'input[name=cei-export-button-php]' ).on( 'click', CEI._export_php );
+			$( 'input[name=cei-export-button-json]' ).on( 'click', CEI._export_json );
 			$( 'input[name=cei-import-button]' ).on( 'click', CEI._import );
 		},
 	
-		_export: function()
+		_export_php: function()
 		{
-			window.location.href = CEIConfig.customizerURL + '?cei-export=' + CEIConfig.exportNonce;
+			window.location.href = CEIConfig.customizerURL + '?cei-export-format=php&cei-export=' + CEIConfig.exportNonce;
 		},
-	
+
+		_export_json: function()
+		{
+			window.location.href = CEIConfig.customizerURL + '?cei-export-format=json&cei-export=' + CEIConfig.exportNonce;
+		},
+
 		_import: function()
 		{
 			var win			= $( window ),
