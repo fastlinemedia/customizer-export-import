@@ -277,7 +277,7 @@ final class CEI_Core {
 		$raw  = file_get_contents( $file['file'] );
 
 		switch ( $file['type'] ) {
-			case 'text/data':
+			case 'text/dat':
 				$data = @unserialize( $raw );
 				break;
 
