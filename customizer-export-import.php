@@ -13,6 +13,7 @@
 define( 'CEI_VERSION', '0.1' );
 define( 'CEI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CEI_PLUGIN_URL', plugins_url( '/', __FILE__ ) );
+define( 'CEI_DISPLAY_JSON_EXPORT', FALSE );
 
 /* Classes */
 require_once CEI_PLUGIN_DIR . 'classes/class-cei-core.php';

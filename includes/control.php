@@ -5,7 +5,7 @@
 	<?php _e( 'Click a button below to export the customization settings for this theme.', 'customizer-export-import' ); ?>
 </span>
 <input type="button" class="button" name="cei-export-button-php" value="<?php esc_attr_e( 'Export PHP', 'customizer-export-import' ); ?>" />
-<?php if (function_exists('json_encode')): ?>
+<?php if ( CEI_DISPLAY_JSON_EXPORT && function_exists('json_encode') ): ?>
 <input type="button" class="button" name="cei-export-button-json" value="<?php esc_attr_e( 'Export JSON', 'customizer-export-import' ); ?>" />
 <?php endif; ?>
 
