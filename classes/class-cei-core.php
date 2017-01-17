@@ -238,7 +238,7 @@ final class CEI_Core {
 		// Setup internal vars.
 		$cei_error	 = false;
 		$template	 = get_template();
-		$overrides   = array( 'test_form' => FALSE, 'mimes' => array('dat' => 'text/dat') );
+		$overrides   = array( 'test_form' => FALSE, 'mimes' => array('dat' => 'text/plain') );
 		$file        = wp_handle_upload( $_FILES['cei-import-file'], $overrides );
 
 		// Make sure we have an uploaded file.
