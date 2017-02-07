@@ -3,14 +3,14 @@
  * Plugin Name: Customizer Export/Import
  * Plugin URI: http://www.wpbeaverbuilder.com/wordpress-customizer-export-import-plugin/?utm_source=external&utm_medium=customizer-export&utm_campaign=plugins-page
  * Description: Adds settings export and import functionality to the WordPress customizer.
- * Version: 0.5
+ * Version: 0.6
  * Author: The Beaver Builder Team
  * Author URI: http://www.wpbeaverbuilder.com/?utm_source=external&utm_medium=customizer-export&utm_campaign=plugins-page
  * License: GNU General Public License v2.0
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: customizer-export-import
  */
-define( 'CEI_VERSION', '0.5' );
+define( 'CEI_VERSION', '0.6' );
 define( 'CEI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CEI_PLUGIN_URL', plugins_url( '/', __FILE__ ) );
 

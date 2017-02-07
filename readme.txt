@@ -76,3 +76,11 @@ Please visit our blog for more info on the [Customizer Export/Import plugin](htt
 = Version 0.3 =
 
 - Customizer settings saved as options are now exported and imported.
+
+= Version 0.5 =
+
+- Fixed an issue with uploads in WordPress 4.7.1.
+
+= Version 0.6 =
+
+- Trying another fix for the issue with uploads in WordPress 4.7.1.
