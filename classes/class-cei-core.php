@@ -156,56 +156,60 @@ final class CEI_Core {
 						  'mods'	  => $mods ? $mods : array(),
 						  'options'	  => array()
 					  );
-		
+
 		// Get options from the Customizer API.
 		$settings = $wp_customize->settings();
-	
+
 		foreach ( $settings as $key => $setting ) {
-			
+
 			if ( 'option' == $setting->type ) {
-				
+
 				// Don't save widget data.
 				if ( stristr( $key, 'widget_' ) ) {
 					continue;
 				}
-				
+
 				// Don't save sidebar data.
 				if ( stristr( $key, 'sidebars_' ) ) {
 					continue;
 				}
-				
+
 				// Don't save core options.
 				if ( in_array( $key, self::$core_options ) ) {
 					continue;
 				}
-				
+
 				$data['options'][ $key ] = $setting->value();
 			}
 		}
-					  
+
 		// Plugin developers can specify additional option keys to export.
 		$option_keys = apply_filters( 'cei_export_option_keys', array() );
-		
+
 		foreach ( $option_keys as $option_key ) {
-			
+
 			$option_value = get_option( $option_key );
-			
+
 			if ( $option_value ) {
 				$data['options'][ $option_key ] = $option_value;
 			}
 		}
-		
+
+		if( function_exists( 'wp_get_custom_css_post' ) ) {
+			$data['wp_css'] = wp_get_custom_css();
+		}
+
 		// Set the download headers.
 		header( 'Content-disposition: attachment; filename=' . $theme . '-export.dat' );
 		header( 'Content-Type: application/octet-stream; charset=' . $charset );
-		
+
 		// Serialize the export data.
 		echo serialize( $data );
-		
+
 		// Start the download.
 		die();
 	}
-	
+
 	/**
 	 * Imports uploaded mods and calls WordPress core customize_save actions so
 	 * themes that hook into them can act before mods are saved to the database.
@@ -287,28 +291,33 @@ final class CEI_Core {
 					'type'			=> 'option',
 					'capability'	=> 'edit_theme_options'
 				) );
-				
+
 				$option->import( $option_value );
 			}
 		}
-		
+
+		// If wp_css is set then import it.
+		if( function_exists( 'wp_update_custom_css_post' ) && isset( $data['wp_css'] ) && '' !== $data['wp_css'] ) {
+			wp_update_custom_css_post( $data['wp_css'] );
+		}
+
 		// Call the customize_save action.
 		do_action( 'customize_save', $wp_customize );
-		
+
 		// Loop through the mods.
 		foreach ( $data['mods'] as $key => $val ) {
-			
+
 			// Call the customize_save_ dynamic action.
 			do_action( 'customize_save_' . $key, $wp_customize );
-			
+
 			// Save the mod.
 			set_theme_mod( $key, $val );
 		}
-		
+
 		// Call the customize_save_after action.
 		do_action( 'customize_save_after', $wp_customize );
 	}
-	
+
 	/**
 	 * Imports images for settings saved as mods.
 	 *
