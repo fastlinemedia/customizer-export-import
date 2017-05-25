@@ -2,7 +2,7 @@
 Contributors: justinbusa
 Tags: customizer, customizer export, customizer import, export, import, settings, customizer settings, theme settings, theme options
 Requires at least: 3.6
-Tested up to: 4.7.1
+Tested up to: 4.7.5
 Stable tag: trunk
 License: GPL2+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -84,3 +84,7 @@ Please visit our blog for more info on the [Customizer Export/Import plugin](htt
 = Version 0.6 =
 
 - Trying another fix for the issue with uploads in WordPress 4.7.1.
+
+= Version 0.7 =
+
+- Added support for exporting and importing custom CSS.
