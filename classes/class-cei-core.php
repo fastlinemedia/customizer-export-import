@@ -187,12 +187,7 @@ final class CEI_Core {
 		$option_keys = apply_filters( 'cei_export_option_keys', array() );
 
 		foreach ( $option_keys as $option_key ) {
-
-			$option_value = get_option( $option_key );
-
-			if ( $option_value ) {
-				$data['options'][ $option_key ] = $option_value;
-			}
+			$data['options'][ $option_key ] = get_option( $option_key );
 		}
 
 		if( function_exists( 'wp_get_custom_css_post' ) ) {
