@@ -2,7 +2,7 @@
 Contributors: justinbusa
 Tags: customizer, customizer export, customizer import, export, import, settings, customizer settings, theme settings, theme options
 Requires at least: 3.6
-Tested up to: 4.7.5
+Tested up to: 4.9.8
 Stable tag: trunk
 License: GPL2+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -38,7 +38,7 @@ Developers can also have arbitrary options that aren't part of the customizer ex
     }
 
     add_filter( 'cei_export_option_keys', 'my_export_option_keys' );
-    
+
 = Known Issues =
 
 This plugin currently only works for active themes, not themes that are being previewed with either the Theme Test Drive plugin or the new customizer theme preview.
@@ -88,3 +88,7 @@ Please visit our blog for more info on the [Customizer Export/Import plugin](htt
 = Version 0.7 =
 
 - Added support for exporting and importing custom CSS.
+
+= Version 0.8 =
+
+- Added support for option data that has an empty value.
