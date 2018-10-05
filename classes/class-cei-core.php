@@ -27,12 +27,12 @@ final class CEI_Core {
 	 *
 	 * @since 0.1
 	 * @return void
-	 */	 
-	static public function load_plugin_textdomain() 
+	 */
+	static public function load_plugin_textdomain()
 	{
 		load_plugin_textdomain( 'customizer-export-import', false, basename( CEI_PLUGIN_DIR ) . '/lang/' );
 	}
-	
+
 	/**
 	 * Check to see if we need to do an export or import.
 	 * This should be called by the customize_register action.
@@ -42,10 +42,10 @@ final class CEI_Core {
 	 * @param object $wp_customize An instance of WP_Customize_Manager.
 	 * @return void
 	 */
-	static public function init( $wp_customize ) 
+	static public function init( $wp_customize )
 	{
 		if ( current_user_can( 'edit_theme_options' ) ) {
-			
+
 			if ( isset( $_REQUEST['cei-export'] ) ) {
 				self::_export( $wp_customize );
 			}
@@ -54,50 +54,50 @@ final class CEI_Core {
 			}
 		}
 	}
-	
+
 	/**
 	 * Prints scripts for the control.
 	 *
 	 * @since 0.1
 	 * @return void
 	 */
-	static public function controls_print_scripts() 
+	static public function controls_print_scripts()
 	{
 		global $cei_error;
-		
+
 		if ( $cei_error ) {
 			echo '<script> alert("' . $cei_error . '"); </script>';
 		}
 	}
-	
+
 	/**
 	 * Enqueues scripts for the control.
 	 *
 	 * @since 0.1
 	 * @return void
 	 */
-	static public function controls_enqueue_scripts() 
+	static public function controls_enqueue_scripts()
 	{
 		// Register
 		wp_register_style( 'cei-css', CEI_PLUGIN_URL . '/css/customizer.css', array(), CEI_VERSION );
 		wp_register_script( 'cei-js', CEI_PLUGIN_URL . '/js/customizer.js', array( 'jquery' ), CEI_VERSION, true );
-	
+
 		// Localize
 		wp_localize_script( 'cei-js', 'CEIl10n', array(
 			'emptyImport'	=> __( 'Please choose a file to import.', 'customizer-export-import' )
 		));
-		
+
 		// Config
 		wp_localize_script( 'cei-js', 'CEIConfig', array(
 			'customizerURL'	  => admin_url( 'customize.php' ),
 			'exportNonce'	  => wp_create_nonce( 'cei-exporting' )
 		));
-	
+
 		// Enqueue
 		wp_enqueue_style( 'cei-css' );
 		wp_enqueue_script( 'cei-js' );
 	}
-	
+
 	/**
 	 * Registers the control with the customizer.
 	 *
@@ -105,7 +105,7 @@ final class CEI_Core {
 	 * @param object $wp_customize An instance of WP_Customize_Manager.
 	 * @return void
 	 */
-	static public function register( $wp_customize ) 
+	static public function register( $wp_customize )
 	{
 		require_once CEI_PLUGIN_DIR . 'classes/class-cei-control.php';
 
@@ -114,24 +114,24 @@ final class CEI_Core {
 			'title'	   => __( 'Export/Import', 'customizer-export-import' ),
 			'priority' => 10000000
 		));
-		
+
 		// Add the export/import setting.
 		$wp_customize->add_setting( 'cei-setting', array(
 			'default' => '',
 			'type'	  => 'none'
 		));
-		
+
 		// Add the export/import control.
-		$wp_customize->add_control( new CEI_Control( 
-			$wp_customize, 
-			'cei-setting', 
+		$wp_customize->add_control( new CEI_Control(
+			$wp_customize,
+			'cei-setting',
 			array(
 				'section'	=> 'cei-section',
 				'priority'	=> 1
 			)
 		));
 	}
-	
+
 	/**
 	 * Export customizer settings.
 	 *
@@ -141,12 +141,12 @@ final class CEI_Core {
 	 * @param object $wp_customize An instance of WP_Customize_Manager.
 	 * @return void
 	 */
-	static private function _export( $wp_customize ) 
+	static private function _export( $wp_customize )
 	{
 		if ( ! wp_verify_nonce( $_REQUEST['cei-export'], 'cei-exporting' ) ) {
 			return;
 		}
-		
+
 		$theme		= get_stylesheet();
 		$template	= get_template();
 		$charset	= get_option( 'blog_charset' );
@@ -165,12 +165,12 @@ final class CEI_Core {
 			if ( 'option' == $setting->type ) {
 
 				// Don't save widget data.
-				if ( stristr( $key, 'widget_' ) ) {
+				if ( 'widget_' === substr( strtolower( $key ), 0, 7 ) ) {
 					continue;
 				}
 
 				// Don't save sidebar data.
-				if ( stristr( $key, 'sidebars_' ) ) {
+				if ( 'sidebars_' === substr( strtolower( $key ), 0, 9 ) ) {
 					continue;
 				}
 
@@ -215,25 +215,25 @@ final class CEI_Core {
 	 * @param object $wp_customize An instance of WP_Customize_Manager.
 	 * @return void
 	 */
-	static private function _import( $wp_customize ) 
+	static private function _import( $wp_customize )
 	{
 		// Make sure we have a valid nonce.
 		if ( ! wp_verify_nonce( $_REQUEST['cei-import'], 'cei-importing' ) ) {
 			return;
 		}
-		
+
 		// Make sure WordPress upload support is loaded.
 		if ( ! function_exists( 'wp_handle_upload' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		}
-		
+
 		// Load the export/import option class.
 		require_once CEI_PLUGIN_DIR . 'classes/class-cei-option.php';
-		
+
 		// Setup global vars.
 		global $wp_customize;
 		global $cei_error;
-		
+
 		// Setup internal vars.
 		$cei_error	 = false;
 		$template	 = get_template();
@@ -249,14 +249,14 @@ final class CEI_Core {
 			$cei_error = __( 'Error importing settings! Please try again.', 'customizer-export-import' );
 			return;
 		}
-		
+
 		// Get the upload data.
 		$raw  = file_get_contents( $file['file'] );
 		$data = @unserialize( $raw );
-		
+
 		// Remove the uploaded file.
 		unlink( $file['file'] );
-		
+
 		// Data checks.
 		if ( 'array' != gettype( $data ) ) {
 			$cei_error = __( 'Error importing settings! Please check that you uploaded a customizer export file.', 'customizer-export-import' );
@@ -270,17 +270,17 @@ final class CEI_Core {
 			$cei_error = __( 'Error importing settings! The settings you uploaded are not for the current theme.', 'customizer-export-import' );
 			return;
 		}
-		
+
 		// Import images.
 		if ( isset( $_REQUEST['cei-import-images'] ) ) {
 			$data['mods'] = self::_import_images( $data['mods'] );
 		}
-		
+
 		// Import custom options.
 		if ( isset( $data['options'] ) ) {
-			
+
 			foreach ( $data['options'] as $option_key => $option_value ) {
-				
+
 				$option = new CEI_Option( $wp_customize, $option_key, array(
 					'default'		=> '',
 					'type'			=> 'option',
@@ -321,18 +321,18 @@ final class CEI_Core {
 	 * @param array $mods An array of customizer mods.
 	 * @return array The mods array with any new import data.
 	 */
-	static private function _import_images( $mods ) 
+	static private function _import_images( $mods )
 	{
 		foreach ( $mods as $key => $val ) {
-			
+
 			if ( self::_is_image_url( $val ) ) {
-				
+
 				$data = self::_sideload_image( $val );
-				
+
 				if ( ! is_wp_error( $data ) ) {
-					
+
 					$mods[ $key ] = $data->url;
-					
+
 					// Handle header image controls.
 					if ( isset( $mods[ $key . '_data' ] ) ) {
 						$mods[ $key . '_data' ] = $data;
@@ -341,10 +341,10 @@ final class CEI_Core {
 				}
 			}
 		}
-		
+
 		return $mods;
 	}
-	
+
 	/**
 	 * Taken from the core media_sideload_image function and
 	 * modified to return an array of data instead of html.
@@ -354,39 +354,39 @@ final class CEI_Core {
 	 * @param string $file The image file path.
 	 * @return array An array of image data.
 	 */
-	static private function _sideload_image( $file ) 
+	static private function _sideload_image( $file )
 	{
 		$data = new stdClass();
-		
+
 		if ( ! function_exists( 'media_handle_sideload' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/media.php' );
 			require_once( ABSPATH . 'wp-admin/includes/file.php' );
 			require_once( ABSPATH . 'wp-admin/includes/image.php' );
 		}
 		if ( ! empty( $file ) ) {
-			
+
 			// Set variables for storage, fix file filename for query strings.
 			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
 			$file_array = array();
 			$file_array['name'] = basename( $matches[0] );
-	
+
 			// Download file to temp location.
 			$file_array['tmp_name'] = download_url( $file );
-	
+
 			// If error storing temporarily, return the error.
 			if ( is_wp_error( $file_array['tmp_name'] ) ) {
 				return $file_array['tmp_name'];
 			}
-	
+
 			// Do the validation and storage stuff.
 			$id = media_handle_sideload( $file_array, 0 );
-	
+
 			// If error storing permanently, unlink.
 			if ( is_wp_error( $id ) ) {
 				@unlink( $file_array['tmp_name'] );
 				return $id;
 			}
-			
+
 			// Build the object to return.
 			$meta					= wp_get_attachment_metadata( $id );
 			$data->attachment_id	= $id;
@@ -395,10 +395,10 @@ final class CEI_Core {
 			$data->height			= $meta['height'];
 			$data->width			= $meta['width'];
 		}
-	
+
 		return $data;
 	}
-	
+
 	/**
 	 * Checks to see whether a string is an image url or not.
 	 *
@@ -407,15 +407,15 @@ final class CEI_Core {
 	 * @param string $string The string to check.
 	 * @return bool Whether the string is an image url or not.
 	 */
-	static private function _is_image_url( $string = '' ) 
+	static private function _is_image_url( $string = '' )
 	{
 		if ( is_string( $string ) ) {
-			
+
 			if ( preg_match( '/\.(jpg|jpeg|png|gif)/i', $string ) ) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
