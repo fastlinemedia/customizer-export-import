@@ -92,3 +92,7 @@ Please visit our blog for more info on the [Customizer Export/Import plugin](htt
 = Version 0.8 =
 
 - Added support for option data that has an empty value.
+
+= Version 0.9 =
+
+- Allow options with `widget` or `sidebar` in their key to be exported.
