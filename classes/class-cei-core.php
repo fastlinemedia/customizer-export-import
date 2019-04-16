@@ -79,8 +79,8 @@ final class CEI_Core {
 	static public function controls_enqueue_scripts()
 	{
 		// Register
-		wp_register_style( 'cei-css', CEI_PLUGIN_URL . '/css/customizer.css', array(), CEI_VERSION );
-		wp_register_script( 'cei-js', CEI_PLUGIN_URL . '/js/customizer.js', array( 'jquery' ), CEI_VERSION, true );
+		wp_register_style( 'cei-css', CEI_PLUGIN_URL . 'css/customizer.css', array(), CEI_VERSION );
+		wp_register_script( 'cei-js', CEI_PLUGIN_URL . 'js/customizer.js', array( 'jquery' ), CEI_VERSION, true );
 
 		// Localize
 		wp_localize_script( 'cei-js', 'CEIl10n', array(
