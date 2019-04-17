@@ -96,3 +96,6 @@ Please visit our blog for more info on the [Customizer Export/Import plugin](htt
 = Version 0.9 =
 
 - Allow options with `widget` or `sidebar` in their key to be exported.
+
+= Version 0.9.1 =
+- Fixed issue with slashes in plugin asset urls and S3. Props Huskynarr.
