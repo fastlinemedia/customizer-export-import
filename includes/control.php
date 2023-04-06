@@ -11,15 +11,22 @@
 <span class="customize-control-title">
 	<?php _e( 'Import', 'customizer-export-import' ); ?>
 </span>
-<span class="description customize-control-description">
-	<?php _e( 'Upload a file to import customization settings for this theme.', 'customizer-export-import' ); ?>
-</span>
-<div class="cei-import-controls">
-	<input type="file" name="cei-import-file" class="cei-import-file" />
-	<label class="cei-import-images">
-		<input type="checkbox" name="cei-import-images" value="1" /> <?php _e( 'Download and import image files?', 'customizer-export-import' ); ?>
-	</label>
-	<?php wp_nonce_field( 'cei-importing', 'cei-import' ); ?>
-</div>
-<div class="cei-uploading"><?php _e( 'Uploading...', 'customizer-export-import' ); ?></div>
-<input type="button" class="button" name="cei-import-button" value="<?php esc_attr_e( 'Import', 'customizer-export-import' ); ?>" />
+
+<?php if ( CEI_Core::can_import() ) :  ?>
+	<span class="description customize-control-description">
+		<?php _e( 'Upload a file to import customization settings for this theme.', 'customizer-export-import' ); ?>
+	</span>
+	<div class="cei-import-controls">
+		<input type="file" name="cei-import-file" class="cei-import-file" />
+		<label class="cei-import-images">
+			<input type="checkbox" name="cei-import-images" value="1" /> <?php _e( 'Download and import image files?', 'customizer-export-import' ); ?>
+		</label>
+		<?php wp_nonce_field( 'cei-importing', 'cei-import' ); ?>
+	</div>
+	<div class="cei-uploading"><?php _e( 'Uploading...', 'customizer-export-import' ); ?></div>
+	<input type="button" class="button" name="cei-import-button" value="<?php esc_attr_e( 'Import', 'customizer-export-import' ); ?>" />
+<?php else : ?>
+	<span class="description customize-control-description">
+		<?php _e( 'You must have the ability to install plugins to upload an export file. Please contact the site administrator for assistance.', 'customizer-export-import' ); ?>
+	</span>
+<?php endif; ?>

@@ -34,6 +34,17 @@ final class CEI_Core {
 	}
 
 	/**
+	 * Check to see if the current user is allowed to import.
+	 *
+	 * @since 0.9.6
+	 * @return bool
+	 */
+	static public function can_import()
+	{
+		return apply_filters( 'cei_allow_unsafe_imports', current_user_can( 'install_plugins' ) );
+	}
+
+	/**
 	 * Check to see if we need to do an export or import.
 	 * This should be called by the customize_register action.
 	 *
@@ -110,7 +121,7 @@ final class CEI_Core {
 		require_once CEI_PLUGIN_DIR . 'classes/class-cei-control.php';
 
 		$description = "<p class='cei-description'>";
-		
+
 		$description .= __( 'Assistant makes tasks like this easier!', 'customizer-export-import' );
 
 		$description .= sprintf( '<br /><a href="%1$s" class="external-link" target="_blank">%2$s<span class="screen-reader-text"> %3$s</span></a>',
@@ -231,6 +242,11 @@ final class CEI_Core {
 	 */
 	static private function _import( $wp_customize )
 	{
+		// Make sure the current user can import.
+		if ( ! self::can_import() ) {
+			return;
+		}
+
 		// Make sure we have a valid nonce.
 		if ( ! wp_verify_nonce( $_REQUEST['cei-import'], 'cei-importing' ) ) {
 			return;

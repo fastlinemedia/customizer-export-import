@@ -105,3 +105,6 @@ Please visit our blog for more info on the [Customizer Export/Import plugin](htt
 
 = Version 0.9.5 =
 - Fixed minor security issue
+
+= Version 0.9.6 =
+- Restrict uploads to users that can install plugins for better security.
