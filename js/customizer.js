@@ -6,6 +6,8 @@
 		{
 			$( 'input[name=cei-export-button]' ).on( 'click', CEI._export );
 			$( 'input[name=cei-import-button]' ).on( 'click', CEI._import );
+			$( '.cei-description').css( 'background', '#FFF' );
+			$( '.cei-description').css( 'padding', '10px' );
 		},
 	
 		_export: function()

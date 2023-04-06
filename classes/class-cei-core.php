@@ -109,10 +109,24 @@ final class CEI_Core {
 	{
 		require_once CEI_PLUGIN_DIR . 'classes/class-cei-control.php';
 
+		$description = "<p class='cei-description'>";
+		
+		$description .= __( 'Assistant makes tasks like this easier!', 'customizer-export-import' );
+
+		$description .= sprintf( '<br /><a href="%1$s" class="external-link" target="_blank">%2$s<span class="screen-reader-text"> %3$s</span></a>',
+			esc_url( __( 'https://assistant.pro/' ) ),
+			__( 'Get started with a Free Account', 'customizer-export-import' ),
+			/* translators: Accessibility text. */
+			__( '(opens in a new tab)', 'customizer-export-import' )
+		);
+
+		$description .= '</p>';
+
 		// Add the export/import section.
 		$wp_customize->add_section( 'cei-section', array(
 			'title'	   => __( 'Export/Import', 'customizer-export-import' ),
-			'priority' => 10000000
+			'priority' => 10000000,
+			'description' => $description,
 		));
 
 		// Add the export/import setting.
@@ -252,7 +266,7 @@ final class CEI_Core {
 
 		// Get the upload data.
 		$raw  = file_get_contents( $file['file'] );
-		$data = @unserialize( $raw );
+		$data = @unserialize( $raw, array( 'allowed_classes' => false ) );
 
 		// Remove the uploaded file.
 		unlink( $file['file'] );
